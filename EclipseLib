@@ -1,143 +1,133 @@
--- EclipseLib: Core Library
-local EclipseLib = {}
+local CustomUILib = {}
 
--- Services
-local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
-local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local LocalPlayer = Players.LocalPlayer
 
--- Window Creation
-function EclipseLib:MakeWindow(options)
+-- Create the Main Window
+function CustomUILib:CreateWindow(options)
+    local window = {}
     options = options or {}
+    local windowTitle = options.Name or "Custom UI Library"
+    
+    -- Create the main UI
+    local ScreenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+    local MainFrame = Instance.new("Frame")
+    local Panel = Instance.new("Frame")
+    local Title = Instance.new("TextLabel")
+    local CloseButton = Instance.new("TextButton")
 
-    -- Create the main UI components
-    local ScreenGui = Instance.new("ScreenGui", PlayerGui)
-    ScreenGui.Name = options.Name or "EclipseLib"
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-    local MainFrame = Instance.new("Frame", ScreenGui)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    -- UI Properties
+    ScreenGui.Name = "CustomUILib"
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     MainFrame.Size = UDim2.new(0, 500, 0, 400)
-    MainFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
-    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    MainFrame.ClipsDescendants = true
-    MainFrame.Draggable = true
-    MainFrame.Active = true
+    MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
 
-    local TopBar = Instance.new("Frame", MainFrame)
-    TopBar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    TopBar.Size = UDim2.new(1, 0, 0, 40)
+    Panel.Name = "Panel"
+    Panel.Parent = MainFrame
+    Panel.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+    Panel.Size = UDim2.new(1, 0, 0, 40)
 
-    local Title = Instance.new("TextLabel", TopBar)
-    Title.Size = UDim2.new(1, -40, 1, 0)
+    Title.Name = "Title"
+    Title.Parent = Panel
+    Title.Text = windowTitle
     Title.Font = Enum.Font.SourceSansBold
-    Title.Text = options.Name or "EclipseLib"
-    Title.TextSize = 20
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.BackgroundTransparency = 1
+    Title.TextScaled = true
+    Title.Size = UDim2.new(0.8, 0, 1, 0)
+    Title.Position = UDim2.new(0.05, 0, 0, 0)
+    Title.TextColor3 = Color3.fromRGB(252, 252, 252)
 
-    local CloseButton = Instance.new("TextButton", TopBar)
+    CloseButton.Name = "CloseButton"
+    CloseButton.Parent = Panel
     CloseButton.Size = UDim2.new(0, 40, 1, 0)
-    CloseButton.Position = UDim2.new(1, -40, 0, 0)
+    CloseButton.Position = UDim2.new(0.9, 0, 0, 0)
     CloseButton.Text = "X"
     CloseButton.Font = Enum.Font.SourceSansBold
-    CloseButton.TextSize = 20
-    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-
+    CloseButton.TextColor3 = Color3.fromRGB(222, 9, 37)
     CloseButton.MouseButton1Click:Connect(function()
-        if options.CloseCallback then
-            options.CloseCallback()
-        end
         ScreenGui:Destroy()
     end)
 
-    local TabContainer = Instance.new("Frame", MainFrame)
-    TabContainer.Size = UDim2.new(0, 120, 1, -40)
+    -- Tab Container
+    local TabContainer = Instance.new("Frame")
+    TabContainer.Name = "TabContainer"
+    TabContainer.Parent = MainFrame
+    TabContainer.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
+    TabContainer.Size = UDim2.new(0.25, 0, 1, -40)
     TabContainer.Position = UDim2.new(0, 0, 0, 40)
-    TabContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 
-    local ContentFrame = Instance.new("Frame", MainFrame)
-    ContentFrame.Size = UDim2.new(1, -120, 1, -40)
-    ContentFrame.Position = UDim2.new(0, 120, 0, 40)
-    ContentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    ContentFrame.ClipsDescendants = true
+    local TabContent = Instance.new("Frame")
+    TabContent.Name = "TabContent"
+    TabContent.Parent = MainFrame
+    TabContent.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+    TabContent.Size = UDim2.new(0.75, 0, 1, -40)
+    TabContent.Position = UDim2.new(0.25, 0, 0, 40)
 
-    -- Return window object
-    local Window = {
-        MainFrame = MainFrame,
-        TabContainer = TabContainer,
-        ContentFrame = ContentFrame,
-        Tabs = {}
-    }
-    setmetatable(Window, { __index = EclipseLib })
-    return Window
-end
+    window.Tabs = {}
+    window.TabContent = TabContent
 
--- Tab Creation
-function EclipseLib:MakeTab(options)
-    options = options or {}
+    -- Add Tabs
+    function window:CreateTab(tabOptions)
+        local tab = {}
+        tabOptions = tabOptions or {}
+        local tabName = tabOptions.Name or "Tab"
+        
+        -- Tab Button
+        local TabButton = Instance.new("TextButton")
+        TabButton.Name = tabName
+        TabButton.Parent = TabContainer
+        TabButton.Text = tabName
+        TabButton.Size = UDim2.new(1, 0, 0, 30)
+        TabButton.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
+        TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TabButton.Font = Enum.Font.SourceSansBold
+        TabButton.TextSize = 14
 
-    local TabButton = Instance.new("TextButton", self.TabContainer)
-    TabButton.Size = UDim2.new(1, 0, 0, 40)
-    TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    TabButton.Text = options.Name or "Tab"
-    TabButton.Font = Enum.Font.SourceSansBold
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.TextSize = 18
+        -- Tab Content
+        local TabFrame = Instance.new("Frame")
+        TabFrame.Name = tabName
+        TabFrame.Parent = TabContent
+        TabFrame.Size = UDim2.new(1, 0, 1, 0)
+        TabFrame.BackgroundColor3 = Color3.fromRGB(47, 47, 47)
+        TabFrame.Visible = false
 
-    local TabContent = Instance.new("ScrollingFrame", self.ContentFrame)
-    TabContent.Visible = false
-    TabContent.Size = UDim2.new(1, 0, 1, 0)
-    TabContent.BackgroundTransparency = 1
-    TabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
+        -- Toggle Tab Visibility
+        TabButton.MouseButton1Click:Connect(function()
+            for _, otherTab in pairs(window.Tabs) do
+                otherTab.Frame.Visible = false
+            end
+            TabFrame.Visible = true
+        end)
 
-    local Layout = Instance.new("UIListLayout", TabContent)
-    Layout.Padding = UDim.new(0, 10)
-    Layout.FillDirection = Enum.FillDirection.Vertical
+        tab.Frame = TabFrame
 
-    -- Tab switching
-    TabButton.MouseButton1Click:Connect(function()
-        for _, tab in ipairs(self.Tabs) do
-            tab.Content.Visible = false
-            tab.Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        -- Add Buttons to the Tab
+        function tab:CreateButton(buttonOptions)
+            buttonOptions = buttonOptions or {}
+            local buttonText = buttonOptions.Name or "Button"
+            local callback = buttonOptions.Callback or function() end
+            
+            local Button = Instance.new("TextButton")
+            Button.Parent = TabFrame
+            Button.Text = buttonText
+            Button.Size = UDim2.new(0.8, 0, 0, 30)
+            Button.Position = UDim2.new(0.1, 0, #TabFrame:GetChildren() * 40 / TabFrame.AbsoluteSize.Y, 0)
+            Button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+            Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Button.Font = Enum.Font.SourceSansBold
+            Button.TextSize = 14
+
+            Button.MouseButton1Click:Connect(function()
+                callback()
+            end)
         end
-        TabContent.Visible = true
-        TabButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    end)
 
-    -- Add tab to the window
-    local Tab = {
-        Button = TabButton,
-        Content = TabContent,
-        Elements = {}
-    }
-    table.insert(self.Tabs, Tab)
-    setmetatable(Tab, { __index = EclipseLib })
-    return Tab
+        table.insert(window.Tabs, tab)
+        return tab
+    end
+
+    return window
 end
 
--- Button Creation
-function EclipseLib:AddButton(options)
-    options = options or {}
-
-    local Button = Instance.new("TextButton", self.Content)
-    Button.Size = UDim2.new(0, 200, 0, 40)
-    Button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    Button.Text = options.Name or "Button"
-    Button.Font = Enum.Font.SourceSansBold
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.TextSize = 18
-
-    Button.MouseButton1Click:Connect(function()
-        if options.Callback then
-            options.Callback()
-        end
-    end)
-
-    -- Adjust canvas size
-    self.Content.CanvasSize = UDim2.new(0, 0, 0, self.Content.UIListLayout.AbsoluteContentSize.Y)
-    table.insert(self.Elements, Button)
-end
-
-return EclipseLib
+return CustomUILib
