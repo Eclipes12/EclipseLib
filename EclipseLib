@@ -27,11 +27,11 @@ local OrionLib = {
 	SaveCfg = false
 }
 
---Feather Icons https://github.com/evoincorp/lucideblox/tree/master/src/modules/util - Created by 7kayoh
+--Feather Icons https://cdn.discordapp.com/attachments/1311412106549133523/1311466353827385395/Radioactive-1--Streamline-Core.png?ex=6748f5b8&is=6747a438&hm=0aea12727268c76788b82894871a930fcbaffd3f879bcccd0d641d2b62c33a82& - Created by 7kayoh
 local Icons = {}
 
 local Success, Response = pcall(function()
-	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
+	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://cdn.discordapp.com/attachments/1311412106549133523/1311466353827385395/Radioactive-1--Streamline-Core.png?ex=6748f5b8&is=6747a438&hm=0aea12727268c76788b82894871a930fcbaffd3f879bcccd0d641d2b62c33a82&")).icons
 end)
 
 if not Success then
