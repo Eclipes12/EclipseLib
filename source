@@ -380,7 +380,7 @@ local NotificationHolder = SetProps(SetChildren(MakeElement("TFrame"), {
 	Parent = Eclipse
 })
 
-function OrionLib:MakeNotification(NotificationConfig)
+function EclipseLib:MakeNotification(NotificationConfig)
 	spawn(function()
 		NotificationConfig.Name = NotificationConfig.Name or "Notification"
 		NotificationConfig.Content = NotificationConfig.Content or "Test"
@@ -1715,7 +1715,7 @@ function EclipseLib:MakeWindow(WindowConfig)
 end   
 
 function EclipseLib:Destroy()
-	Orion:Destroy()
+	Eclipse:Destroy()
 end
 
 return EclipseLib
