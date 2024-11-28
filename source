@@ -23,26 +23,7 @@ local EclipseLib = {
 	SelectedTheme = "Default",
 	Folder = nil,
 	SaveCfg = false
-}
-
-local Success, Response = pcall(function()
-    -- your code to load the Feather Icons or perform an action
-    -- for example:
-    -- local response = game:GetService("HttpService"):GetAsync("some_url")
-    return true -- or some response value
-end)
-
-if not Success then
-    warn("\nEclipse Library - Failed to load Feather Icons. Error code: " .. tostring(Response) .. "\n")
-end	
-
-local function GetIcon(IconName)
-	if Icons[IconName] ~= nil then
-		return Icons[IconName]
-	else
-		return nil
-	end
-end   
+} 
 
 local Eclipse = Instance.new("ScreenGui")
 Eclipse.Name = "Eclipse"
