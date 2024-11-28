@@ -25,6 +25,25 @@ local EclipseLib = {
 	SaveCfg = false
 } 
 
+--Feather Icons https://cdn.discordapp.com/attachments/1311412106549133523/1311466353827385395/Radioactive-1--Streamline-Core.png?ex=6748f5b8&is=6747a438&hm=0aea12727268c76788b82894871a930fcbaffd3f879bcccd0d641d2b62c33a82& - Created by 7kayoh
+local Icons = {}
+
+local Success, Response = pcall(function()
+	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://cdn.discordapp.com/attachments/1311412106549133523/1311466353827385395/Radioactive-1--Streamline-Core.png?ex=6748f5b8&is=6747a438&hm=0aea12727268c76788b82894871a930fcbaffd3f879bcccd0d641d2b62c33a82&")).icons
+end)
+
+if not Success then
+	warn("\nEclipse Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
+end	
+
+local function GetIcon(IconName)
+	if Icons[IconName] ~= nil then
+		return Icons[IconName]
+	else
+		return nil
+	end
+end
+
 local Eclipse = Instance.new("ScreenGui")
 Eclipse.Name = "Eclipse"
 if syn then
